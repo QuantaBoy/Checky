@@ -1,0 +1,13 @@
+.claude/
+node_modules/
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+.env
+.env*.local
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vscode/

@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/*
+ * Sentinel is a 24×7 command-centre application. It commits to a single dark
+ * palette on purpose: operators watch a video wall in a low-light room, and a
+ * theme that can flip to white behind a live feed is a real usability problem,
+ * not a preference.
+ */
+
+@theme {
+  --color-ink-950: #070a10;
+  --color-ink-900: #0b1018;
+  --color-ink-850: #0f1622;
+  --color-ink-800: #131c2b;
+  --color-ink-700: #1b2738;
+  --color-ink-600: #253449;
+  --color-ink-500: #34455e;
+
+  --color-mist-400: #7d90ab;
+  --color-mist-300: #9fb0c8;
+  --color-mist-200: #c6d2e3;
+  --color-mist-100: #e8eef8;
+
+  --color-saffron-500: #f0a022;
+  --color-saffron-400: #f5b445;
+  --color-saffron-300: #ffd08a;
+
+  --color-signal-500: #2dd4bf;
+  --color-signal-400: #5eead4;
+
+  --color-alarm-600: #dc2626;
+  --color-alarm-500: #ef4444;
+  --color-alarm-400: #f87171;
+
+  --color-warn-500: #f59e0b;
+  --color-ok-500: #22c55e;
+  --color-info-500: #38bdf8;
+
+  --font-sans: "Segoe UI", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Cascadia Mono", ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(45, 212, 191, 0.06), transparent 60%),
+    radial-gradient(900px 500px at 95% 0%, rgba(240, 160, 34, 0.05), transparent 55%),
+    var(--color-ink-950);
+  color: var(--color-mist-100);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(240, 160, 34, 0.35);
+}
+
+/* Scrollbars: thin and dark so a long alert queue does not draw the eye. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ink-600) transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-ink-600);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Focus visibility is an accessibility floor, not a style choice. */
+:focus-visible {
+  outline: 2px solid var(--color-saffron-400);
+  outline-offset: 2px;
+}
+
+@keyframes sentinel-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.animate-pulse-slow {
+  animation: sentinel-pulse 2s ease-in-out infinite;
+}
+
+@keyframes sentinel-slide-in {
+  from { transform: translateY(-6px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-in {
+  animation: sentinel-slide-in 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-slow,
+  .animate-slide-in {
+    animation: none;
+  }
+}
+
+/* Leaflet needs its own stylesheet; these are the pieces we actually use, inlined
+   so the map works without an external stylesheet request (CSP-friendly). */
+.leaflet-container {
+  background: var(--color-ink-900);
+  font-family: var(--font-sans);
+  outline: none;
+}
+.leaflet-tile-pane {
+  /* Public OSM tiles are light; dampen them so markers and routes stay readable
+     against the dark command-centre chrome. */
+  filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.9) saturate(0.6);
+}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: var(--color-ink-800);
+  color: var(--color-mist-100);
+  border: 1px solid var(--color-ink-600);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+.leaflet-popup-content {
+  margin: 10px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.leaflet-control-zoom a {
+  background: var(--color-ink-800) !important;
+  color: var(--color-mist-200) !important;
+  border-color: var(--color-ink-600) !important;
+}
+.leaflet-control-attribution {
+  background: rgba(11, 16, 24, 0.8) !important;
+  color: var(--color-mist-400) !important;
+  font-size: 10px;
+}
+.leaflet-control-attribution a {
+  color: var(--color-mist-300) !important;
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-plain {
+    background: #fff !important;
+    color: #000 !important;
+    border-color: #999 !important;
+  }
+}
